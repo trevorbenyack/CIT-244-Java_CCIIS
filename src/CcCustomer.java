@@ -1,6 +1,9 @@
 public class CcCustomer extends CcCompany {
+    private int routingNum;
+    private int branchNum;
+
     private int customerAcctNum;
-    private String customerAcctName;
+    private String customerName;
     private String customerAddress;
     private String customerCity;
     private String customerState;
@@ -11,20 +14,40 @@ public class CcCustomer extends CcCompany {
     public CcCustomer() {
     }
 
-    public int getCustomerAcctNum() {
+    @Override
+    public int getRoutingNum() {
+        return routingNum;
+    }
+
+    @Override
+    public void setRoutingNum(int routingNum) {
+        this.routingNum = routingNum;
+    }
+
+    @Override
+    public int getBranchNum() {
+        return branchNum;
+    }
+
+    @Override
+    public void setBranchNum(int branchNum) {
+        this.branchNum = branchNum;
+    }
+
+    public int getAccountNum() {
         return customerAcctNum;
     }
 
-    public void setCustomerAcctNum(int customerAcctNum) {
-        this.customerAcctNum = customerAcctNum;
+    public void setAccountNum(int accountNum) {
+        this.customerAcctNum = accountNum;
     }
 
-    public String getCustomerAcctName() {
-        return customerAcctName;
+    public String getCustomerName() {
+        return customerName;
     }
 
-    public void setCustomerAcctName(String customerAcctName) {
-        this.customerAcctName = customerAcctName;
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
     public String getCustomerAddress() {
@@ -55,9 +78,7 @@ public class CcCustomer extends CcCompany {
         return customerZip;
     }
 
-    public void setCustomerZip(String customerZip) {
-        this.customerZip = customerZip;
-    }
+    public void setCustomerZip(String customerZip) { this.customerZip = customerZip; }
 
     public String getCustomerEmail() {
         return customerEmail;

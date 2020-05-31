@@ -3,46 +3,26 @@ import java.util.ArrayList;
 
 public abstract class CcCustFinData extends CcCustomer{
 
-    private int routingNum;
-    private int branchNum;
+    private int accountNum;
     private enum accountType {Business, Personal}
     private BigDecimal creditLimit;
     private BigDecimal prevBalance;
 
-    private ArrayList<String> purchaseDescription; // each element corresponds to element in credits
-
-    // The credit card account that a bank creates for a customer is considered a liability account
-    ArrayList<BigDecimal> creditsLedgerList = new ArrayList<>(); // lending increases balance of a liability account
-    ArrayList<BigDecimal> debitsLedgerList = new ArrayList<>(); // payments received decrease balance of a liability account
-
-    public abstract BigDecimal getLedgerTotal(ArrayList<BigDecimal> ledgerList);
-    public abstract void addToLedgerList(ArrayList<BigDecimal> ledgerList, String lineItem);
-    public abstract BigDecimal getFinanceCharge();
-    public abstract BigDecimal getFinalStatementBalance();
-    public abstract BigDecimal getNewMinPaymentAmt();
-    public abstract Boolean isOverCreditLimit(BigDecimal semiFinalBalance);
+    // Each line item is stored in a one dimensional array with the first element as the amount (debit (-) or credit (+))
+    // and the second element as its description. Each line item array is then added to the ledgerList list
+    ArrayList<String[]> ledgerList = new ArrayList<>();
 
     public CcCustFinData(){
     }
 
     @Override
-    public int getRoutingNum() {
-        return routingNum;
+    public int getAccountNum() {
+        return accountNum;
     }
 
     @Override
-    public void setRoutingNum(int routingNum) {
-        this.routingNum = routingNum;
-    }
-
-    @Override
-    public int getBranchNum() {
-        return branchNum;
-    }
-
-    @Override
-    public void setBranchNum(int branchNum) {
-        this.branchNum = branchNum;
+    public void setAccountNum(int accountNum) {
+        this.accountNum = accountNum;
     }
 
     public BigDecimal getCreditLimit() {
@@ -61,29 +41,19 @@ public abstract class CcCustFinData extends CcCustomer{
         this.prevBalance = prevBalance;
     }
 
-    // THESE WON'T BE GETTER SETTER... They'll need to be changed to add/retrieve
-    public ArrayList<String> getPurchaseDescription() {
-        return purchaseDescription;
-    }
-    public void setPurchaseDescription(ArrayList<String> purchaseDescription) {
-        this.purchaseDescription = purchaseDescription;
+    public ArrayList<String[]> getLedgerList() {
+        return ledgerList;
     }
 
-    public ArrayList<BigDecimal> getCreditsLedgerList() {
-        return creditsLedgerList;
+    public void setLedgerList(ArrayList<BigDecimal> creditsLedgerList) {
+        this.ledgerList = ledgerList;
     }
 
-    public void setCreditsLedgerList(ArrayList<BigDecimal> creditsLedgerList) {
-        this.creditsLedgerList = creditsLedgerList;
-    }
-
-    public ArrayList<BigDecimal> getDebitsLedgerList() {
-        return debitsLedgerList;
-    }
-
-    public void setDebitsLedgerList(ArrayList<BigDecimal> debitsLedgerList) {
-        this.debitsLedgerList = debitsLedgerList;
-    }
-
+    public abstract BigDecimal getLedgerTotal(ArrayList<String[]> ledgerList);
+    public abstract void addToLedgerList(ArrayList<String[]> ledgerList, String creditDebit, String description);
+    public abstract BigDecimal getInterestCharge(BigDecimal annualInterestRate);
+    public abstract BigDecimal getFinalStatementBalance(BigDecimal overLimitFee, BigDecimal annualInterestRate);
+    public abstract BigDecimal getNewMinPaymentAmt(BigDecimal paymentRate, BigDecimal finalStatementBalance);
+    public abstract Boolean isOverCreditLimit(BigDecimal semiFinalBalance);
 
 }

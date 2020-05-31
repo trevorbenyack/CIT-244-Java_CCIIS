@@ -12,9 +12,7 @@ public class CcCompany {
     public CcCompany() {
     }
 
-    public int getRoutingNum() {
-        return routingNum;
-    }
+    public int getRoutingNum() { return routingNum; }
 
     public void setRoutingNum(int routingNum) {
         this.routingNum = routingNum;
@@ -27,6 +25,10 @@ public class CcCompany {
     public void setBranchNum(int branchNum) {
         this.branchNum = branchNum;
     }
+
+    public String getCompanyName() { return companyName; }
+
+    public void setCompanyName(String companyName) { this.companyName = companyName; }
 
     public String getbranchName() {
         return companyName;
