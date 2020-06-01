@@ -8,8 +8,9 @@ public abstract class CcCustFinData extends CcCustomer{
     private BigDecimal creditLimit;
     private BigDecimal prevBalance;
 
-    // Each line item is stored in a one dimensional array with the first element as the amount (debit (-) or credit (+))
-    // and the second element as its description. Each line item array is then added to the ledgerList list
+    // Each line item is stored in a one dimensional array with the first element as the line item description and
+    // the second element as the amount (debit (-) or credit (+)). Each line item array is then added to the
+    // ledgerList list
     ArrayList<String[]> ledgerList = new ArrayList<>();
 
     public CcCustFinData(){
@@ -50,7 +51,6 @@ public abstract class CcCustFinData extends CcCustomer{
     }
 
     public abstract BigDecimal getLedgerTotal(ArrayList<String[]> ledgerList);
-    public abstract void addToLedgerList(ArrayList<String[]> ledgerList, String creditDebit, String description);
     public abstract BigDecimal getInterestCharge(BigDecimal annualInterestRate);
     public abstract BigDecimal getFinalStatementBalance(BigDecimal overLimitFee, BigDecimal annualInterestRate);
     public abstract BigDecimal getNewMinPaymentAmt(BigDecimal paymentRate, BigDecimal finalStatementBalance);

@@ -1,6 +1,9 @@
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
+
+import java.util.ArrayList;
 
 // this pane contains the data entry nodes
 public class CciisDataEntryPane extends BorderPane {
@@ -13,8 +16,10 @@ public class CciisDataEntryPane extends BorderPane {
 
     // creates lower portion of window
     BorderPane lineItemsPane = new BorderPane();
-    private LineItemEntryPane lineItemEntryPane= new LineItemEntryPane();
-    private RecentLedgerItems recentLedgerItems = new RecentLedgerItems();
+    LineItemEntryPane lineItemEntryPane = new LineItemEntryPane();
+    RecentLedgerItems recentLedgerItems = new RecentLedgerItems();
+
+    Button btSave = new Button();
 
     // constructor
     public CciisDataEntryPane() {
@@ -34,8 +39,11 @@ public class CciisDataEntryPane extends BorderPane {
         lineItemsPane.setCenter(recentLedgerItems);
 
 
+
+
         this.setTop(upperHalfPane);
         this.setCenter(lineItemsPane);
+        this.setBottom(btSave);
     } // end CciisDataEntryPane() constructor
 
     public class CcBranchDataEntryPane extends GridPane {
@@ -164,23 +172,21 @@ public class CciisDataEntryPane extends BorderPane {
     }  // end CcCustAcctInfoDataEntryPane class
 
     public class LineItemEntryPane extends GridPane {
-        private TextField tfAmount = new TextField();
-        private TextField tfDescription = new TextField();
-        private TwoRadioButtons debitCredit = new TwoRadioButtons("Credit", "Debit");
-        private HBox debitCreditPane;
-        private Button btAddLineItem = new Button("+");
+        TextField tfDescription = new TextField();
+        TextField tfAmount = new TextField();
+        TwoRadioButtons debitCreditToggle = new TwoRadioButtons("Credit", "Debit");
+        HBox debitCreditPane;
+        Button btAddLineItem = new Button("+");
 
         public LineItemEntryPane() {
 
-
-
             this.setHgap(10);
-
-            this.add(new Label("Amount:"), 0, 0);
-            this.add(tfAmount, 1, 0);
-            this.add(new Label("Description:"), 2, 0);
-            this.add(tfDescription, 3, 0);
-            debitCreditPane = debitCredit.getTwoRadioButtonsPane();
+            this.add(new Label("Add recent ledger item:"), 0, 0);
+            this.add(new Label("Description:"), 1, 0);
+            this.add(tfDescription, 2, 0);
+            this.add(new Label("Amount:"), 3, 0);
+            this.add(tfAmount, 4, 0);
+            debitCreditPane = debitCreditToggle.getTwoRadioButtonsPane();
             this.add(debitCreditPane, 5, 0);
             this.add(btAddLineItem, 6, 0);
 
@@ -194,9 +200,28 @@ public class CciisDataEntryPane extends BorderPane {
     } // end LineItemEntryPane class
 
     public class RecentLedgerItems extends VBox {
-        RecentLedgerItems(){
-            this.getChildren().add(new Label("Add Recent Ledger Items:"));
+        public RecentLedgerItems(){
         }
+
+        GridPane ledgerGrid = new GridPane();
+
+        public void printLedgerList(ArrayList<String[]> ledgerList) {
+            int i = 1;
+
+            for (String[] lineItem : ledgerList) {
+                for (String element :lineItem) {
+                    this.getChildren().remove(ledgerGrid);
+                    ledgerGrid.add(new Text("Line Item Description: "), 0, 0);
+                    ledgerGrid.add(new Text("Amount: "), 1, 0);
+                    ledgerGrid.add(new Text(lineItem[0]), 0, i);
+                    ledgerGrid.add(new Text(lineItem[1]), 1, i);
+                    this.getChildren().add(ledgerGrid);
+                }
+                i++;
+            }
+
+        }
+
     } // end RecentLedgerItems
 
     public class TwoRadioButtons extends ToggleGroup {
@@ -212,6 +237,8 @@ public class CciisDataEntryPane extends BorderPane {
 
             rbLabel01.setToggleGroup(twoRadioButtons);
             rbLabel02.setToggleGroup(twoRadioButtons);
+
+            rbLabel01.setSelected(true);
 
             twoRadioButtonsPane.getChildren().addAll(rbLabel01, rbLabel02);
 

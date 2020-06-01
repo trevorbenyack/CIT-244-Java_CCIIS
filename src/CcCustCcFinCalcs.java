@@ -12,15 +12,6 @@ public class CcCustCcFinCalcs extends CcCustFinData {
     public CcCustCcFinCalcs() {
     }
 
-    // adds a line item to ledgerList
-    public void addToLedgerList(ArrayList<String[]> ledgerList, String creditDebit, String description) {
-        String[] lineItem = new String[2];
-        lineItem[0] = creditDebit;
-        lineItem[1] = description;
-        ledgerList.add(lineItem);
-
-    }
-
     // adds all Credits or Debits made to the account
     @Override
     public BigDecimal getLedgerTotal(ArrayList<String[]> ledgerList) {

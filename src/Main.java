@@ -12,10 +12,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 public class Main extends Application {
 
@@ -23,6 +25,20 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception{
 
         CciisDataEntryPane dataEntryPane = new CciisDataEntryPane();
+        GuiLogic guiLogic = new GuiLogic();
+
+        // holds ledger list until the user saves the entire entry
+        ArrayList<String[]> tempLedgerList = new ArrayList<>();
+
+        dataEntryPane.lineItemEntryPane.btAddLineItem
+                .setOnAction(event -> guiLogic.addToLedgerList(
+                        tempLedgerList,
+                        dataEntryPane.lineItemEntryPane.tfDescription.getText(),
+                        dataEntryPane.lineItemEntryPane.tfAmount.getText(),
+                        dataEntryPane.lineItemEntryPane.debitCreditToggle,
+                        dataEntryPane
+                ));
+        dataEntryPane.btSave.setOnAction(event -> guiLogic.saveFormData(dataEntryPane));
 
 //        // This will probably need to go into the final pane to get around private modifiers of TextFields
 //        Button btSave = new Button("Save");
