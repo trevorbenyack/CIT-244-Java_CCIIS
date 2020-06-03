@@ -3,10 +3,10 @@ import java.util.ArrayList;
 
 public abstract class CcCustFinData extends CcCustomer{
 
-    private int accountNum;
-    private enum accountType {Business, Personal}
-    private BigDecimal creditLimit;
-    private BigDecimal prevBalance;
+    private String accountNum;
+    private String accountType;
+    private String creditLimit;
+    private String prevBalance;
 
     // Each line item is stored in a one dimensional array with the first element as the line item description and
     // the second element as the amount (debit (-) or credit (+)). Each line item array is then added to the
@@ -17,28 +17,36 @@ public abstract class CcCustFinData extends CcCustomer{
     }
 
     @Override
-    public int getAccountNum() {
+    public String getAccountNum() {
         return accountNum;
     }
 
     @Override
-    public void setAccountNum(int accountNum) {
+    public void setAccountNum(String accountNum) {
         this.accountNum = accountNum;
     }
 
-    public BigDecimal getCreditLimit() {
+    public String getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
+    }
+
+    public String getCreditLimit() {
         return creditLimit;
     }
 
-    public void setCreditLimit(BigDecimal creditLimit) {
+    public void setCreditLimit(String creditLimit) {
         this.creditLimit = creditLimit;
     }
 
-    public BigDecimal getPrevBalance() {
+    public String getPrevBalance() {
         return prevBalance;
     }
 
-    public void setPrevBalance(BigDecimal prevBalance) {
+    public void setPrevBalance(String prevBalance) {
         this.prevBalance = prevBalance;
     }
 
@@ -50,10 +58,12 @@ public abstract class CcCustFinData extends CcCustomer{
         this.ledgerList = ledgerList;
     }
 
-    public abstract BigDecimal getLedgerTotal(ArrayList<String[]> ledgerList);
-    public abstract BigDecimal getInterestCharge(BigDecimal annualInterestRate);
-    public abstract BigDecimal getFinalStatementBalance(BigDecimal overLimitFee, BigDecimal annualInterestRate);
-    public abstract BigDecimal getNewMinPaymentAmt(BigDecimal paymentRate, BigDecimal finalStatementBalance);
-    public abstract Boolean isOverCreditLimit(BigDecimal semiFinalBalance);
+    public abstract BigDecimal getLedgerListTotal();
+    public abstract BigDecimal getInitialStatementBalance();
+    public abstract BigDecimal getInterestCharge();
+    public abstract BigDecimal getFinalStatementBalance();
+    public abstract BigDecimal getNewMinPaymentAmt();
+    public abstract Boolean getIsOverCreditLimit ();
+    public abstract BigDecimal getRemainingCreditAmt();
 
 }

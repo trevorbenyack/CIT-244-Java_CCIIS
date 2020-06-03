@@ -1,44 +1,44 @@
 public class CcCustomer extends CcCompany {
-    private int routingNum;
-    private int branchNum;
+    private String routingNum;
+    private String branchNum;
 
-    private int customerAcctNum;
+    private String customerAcctNum;
     private String customerName;
     private String customerAddress;
     private String customerCity;
     private String customerState;
     private String customerZip;
     private String customerEmail;
-    private int customerPhone;
+    private String customerPhone;
 
     public CcCustomer() {
     }
 
     @Override
-    public int getRoutingNum() {
+    public String getRoutingNum() {
         return routingNum;
     }
 
     @Override
-    public void setRoutingNum(int routingNum) {
+    public void setRoutingNum(String routingNum) {
         this.routingNum = routingNum;
     }
 
     @Override
-    public int getBranchNum() {
+    public String getBranchNum() {
         return branchNum;
     }
 
     @Override
-    public void setBranchNum(int branchNum) {
+    public void setBranchNum(String branchNum) {
         this.branchNum = branchNum;
     }
 
-    public int getAccountNum() {
+    public String getAccountNum() {
         return customerAcctNum;
     }
 
-    public void setAccountNum(int accountNum) {
+    public void setAccountNum(String accountNum) {
         this.customerAcctNum = accountNum;
     }
 
@@ -88,11 +88,11 @@ public class CcCustomer extends CcCompany {
         this.customerEmail = customerEmail;
     }
 
-    public int getCustomerPhone() {
+    public String getCustomerPhone() {
         return customerPhone;
     }
 
-    public void setCustomerPhone(int customerPhone) {
+    public void setCustomerPhone(String customerPhone) {
         this.customerPhone = customerPhone;
     }
 }

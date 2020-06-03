@@ -1,28 +1,28 @@
 public class CcCompany {
-    private int routingNum;
-    private int branchNum;
+    private String routingNum;
+    private String branchNum;
     private String companyName;
     private String branchAddress;
     private String branchCity;
     private String branchState;
     private String branchZip;
     private String branchEmail;
-    private int branchPhone;
+    private String branchPhone;
 
     public CcCompany() {
     }
 
-    public int getRoutingNum() { return routingNum; }
+    public String getRoutingNum() { return routingNum; }
 
-    public void setRoutingNum(int routingNum) {
+    public void setRoutingNum(String routingNum) {
         this.routingNum = routingNum;
     }
 
-    public int getBranchNum() {
+    public String getBranchNum() {
         return branchNum;
     }
 
-    public void setBranchNum(int branchNum) {
+    public void setBranchNum(String branchNum) {
         this.branchNum = branchNum;
     }
 
@@ -78,11 +78,11 @@ public class CcCompany {
         this.branchEmail = branchEmail;
     }
 
-    public int getbranchPhone() {
+    public String getbranchPhone() {
         return branchPhone;
     }
 
-    public void setbranchPhone(int branchPhone) {
+    public void setbranchPhone(String branchPhone) {
         this.branchPhone = branchPhone;
     }
 
