@@ -12,15 +12,12 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 
 public class Main extends Application {
-    CciisDataEntryPane dataEntryPane = new CciisDataEntryPane();
-    CciisViewStatementPane cciisViewStatementPane = new CciisViewStatementPane();
-    ArrayList<CcCustCcFinCalcs> allStatementsList = new ArrayList<>();
-    ArrayList<String[]> ledgerList = new ArrayList<>();
-    GuiLogic guiLogic = new GuiLogic(allStatementsList, ledgerList);
+    GUI_Pane_DataEntry dataEntryPane = new GUI_Pane_DataEntry();
+    GUI_Pane_Statement cciisViewStatementPane = new GUI_Pane_Statement();
+    ArrayList<CcStatement> allStatementsList = new ArrayList<>();
     // holds ledger list until the user saves the entire entry
-
-
-
+    ArrayList<String[]> ledgerList = new ArrayList<>();
+    GUI_Logic guiLogic = new GUI_Logic(allStatementsList, ledgerList);
 
     @Override
     public void start(Stage primaryStage) throws Exception{
@@ -53,7 +50,7 @@ public class Main extends Application {
 
     public class TabMainPane extends TabPane {
         Tab tab1 = new Tab("Data Entry", dataEntryPane);
-        Tab tab2 = new Tab("View Statement", cciisViewStatementPane);
+        Tab tab2 = new Tab("View CcStatement", cciisViewStatementPane);
 
         public TabMainPane() {
 
@@ -62,7 +59,4 @@ public class Main extends Application {
         }
 
     }
-
-
-
 }

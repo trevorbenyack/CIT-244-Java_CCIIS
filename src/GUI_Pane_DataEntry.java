@@ -1,12 +1,9 @@
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
-import javafx.scene.text.Text;
-
-import java.util.ArrayList;
 
 // this pane contains the data entry nodes
-public class CciisDataEntryPane extends GuiComponents {
+public class GUI_Pane_DataEntry extends GUI_Components {
 
 
 
@@ -18,19 +15,19 @@ public class CciisDataEntryPane extends GuiComponents {
 
     // Creates upper portion of window
     HBox upperHalfPane = new HBox();
-    GuiComponents.CcBranchDataEntryPane ccBranchDataEntryPane = new GuiComponents.CcBranchDataEntryPane();
-    GuiComponents.CcCustomerDataEntryPane ccCustomerDataEntryPane = new GuiComponents.CcCustomerDataEntryPane();
-    GuiComponents.CcCustAcctInfoDataEntryPane ccCustAcctInfoDataEntryPane = new GuiComponents.CcCustAcctInfoDataEntryPane();
+    GUI_Components.CcBranchDataEntryPane ccBranchDataEntryPane = new GUI_Components.CcBranchDataEntryPane();
+    GUI_Components.CcCustomerDataEntryPane ccCustomerDataEntryPane = new GUI_Components.CcCustomerDataEntryPane();
+    GUI_Components.CcCustAcctInfoDataEntryPane ccCustAcctInfoDataEntryPane = new GUI_Components.CcCustAcctInfoDataEntryPane();
 
     // creates lower portion of window
     BorderPane lineItemsPane = new BorderPane();
     LineItemEntryPane lineItemEntryPane = new LineItemEntryPane();
-    GuiComponents.RecentLedgerItems recentLedgerItems = new GuiComponents.RecentLedgerItems();
+    GUI_Components.RecentLedgerItems recentLedgerItems = new GUI_Components.RecentLedgerItems();
 
     Button btSave = new Button("Save");
 
     // constructor
-    public CciisDataEntryPane() {
+    public GUI_Pane_DataEntry() {
 
         // adds branch/customer/account data entry panes to upper half of the window
         upperHalfPane.getChildren().add(ccBranchDataEntryPane);
@@ -49,7 +46,7 @@ public class CciisDataEntryPane extends GuiComponents {
         this.setTop(upperHalfPane);
         this.setCenter(lineItemsPane);
         this.setBottom(btSave);
-    } // end CciisDataEntryPane() constructor
+    } // end GUI_Pane_DataEntry() constructor
 
     public class LineItemEntryPane extends GridPane {
         TextField tfDescription = new TextField();
@@ -79,6 +76,6 @@ public class CciisDataEntryPane extends GuiComponents {
 
     } // end LineItemEntryPane class
 
-} // end CciisDataEntryPane class
+} // end GUI_Pane_DataEntry class
 
 

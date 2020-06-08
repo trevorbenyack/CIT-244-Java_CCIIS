@@ -1,42 +1,25 @@
-import java.math.BigDecimal;
-import java.sql.Statement;
 import java.util.ArrayList;
-import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.geometry.HPos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.stage.Stage;
 
 
-public class GuiLogic{
+public class GUI_Logic {
 
-    CciisDataEntryPane dataEntryPane;
-    ArrayList<CcCustCcFinCalcs> allStatementsList;
+    GUI_Pane_DataEntry dataEntryPane;
+    ArrayList<CcStatement> allStatementsList;
     ArrayList<String[]> ledgerList = new ArrayList<>();
 
-    public GuiLogic(ArrayList<CcCustCcFinCalcs> allStatementsList, ArrayList<String[]> ledgerList){
+    public GUI_Logic(ArrayList<CcStatement> allStatementsList, ArrayList<String[]> ledgerList){
         this.allStatementsList = allStatementsList;
         this.ledgerList = ledgerList;
     }
 
-    private int lastStatementId = 0;
-
     // adds a line item to ledgerList
     public void addToLedgerList(
             ArrayList<String[]> ledgerList,
-            CciisDataEntryPane dataEntryPane) {
+            GUI_Pane_DataEntry dataEntryPane) {
 
         String description = dataEntryPane.lineItemEntryPane.tfDescription.getText();
         String amount = dataEntryPane.lineItemEntryPane.tfAmount.getText();
-        CciisDataEntryPane.TwoRadioButtons debitCreditToggle = dataEntryPane.lineItemEntryPane.debitCreditToggle;
+        GUI_Pane_DataEntry.TwoRadioButtons debitCreditToggle = dataEntryPane.lineItemEntryPane.debitCreditToggle;
 
         String[] lineItem = new String[2];
         lineItem[0] = description;
@@ -58,15 +41,15 @@ public class GuiLogic{
 
     } //end addToLedgerList method
 
-    public void saveFormData(CciisDataEntryPane dataEntryPane){
+    public void saveFormData(GUI_Pane_DataEntry dataEntryPane){
 
         if (dataEntryPane.ccCustAcctInfoDataEntryPane.rbAccountType.rbLabel01.isSelected()) {
-            allStatementsList.add(new CcCustCcFinCalcs(new CcCustBusinessRatesFees(), ledgerList));
+            allStatementsList.add(new CcStatement(new RatesFees(AccountType.BUSINESS), ledgerList));
         } else if (dataEntryPane.ccCustAcctInfoDataEntryPane.rbAccountType.rbLabel02.isSelected()) {
-            allStatementsList.add(new CcCustCcFinCalcs(new CcCustPersonalRatesFees(), ledgerList));
+            allStatementsList.add(new CcStatement(new RatesFees(AccountType.PERSONAL), ledgerList));
         }
-        lastStatementId = allStatementsList.size() - 1;
-        CcCustFinData statementFormData = allStatementsList.get(lastStatementId);
+
+        CcAccount statementFormData = allStatementsList.get(allStatementsList.size() - 1);
 
         statementFormData.setRoutingNum(dataEntryPane.ccBranchDataEntryPane.tfRoutingNum.getText());
         statementFormData.setBranchNum(dataEntryPane.ccBranchDataEntryPane.tfBranchNum.getText());
@@ -85,27 +68,18 @@ public class GuiLogic{
         statementFormData.setCustomerZip(dataEntryPane.ccCustomerDataEntryPane.tfCustomerZip.getText());
         statementFormData.setCustomerEmail(dataEntryPane.ccCustomerDataEntryPane.tfCustomerEmail.getText());
         statementFormData.setCustomerPhone(dataEntryPane.ccCustomerDataEntryPane.tfCustomerPhone.getText());
-
         statementFormData.setAccountNum(dataEntryPane.ccCustAcctInfoDataEntryPane.tfAccountNum.getText());
         if (dataEntryPane.ccCustAcctInfoDataEntryPane.rbAccountType.rbLabel01.isSelected()) {
-            statementFormData.setAccountType("0");
+            statementFormData.setAccountType(AccountType.BUSINESS);
         } else if (dataEntryPane.ccCustAcctInfoDataEntryPane.rbAccountType.rbLabel02.isSelected()) {
-            statementFormData.setAccountType("1");
+            statementFormData.setAccountType(AccountType.PERSONAL);
         }
         statementFormData.setCreditLimit(dataEntryPane.ccCustAcctInfoDataEntryPane.tfCreditLimit.getText());
         statementFormData.setPrevBalance(dataEntryPane.ccCustAcctInfoDataEntryPane.tfPrevBalance.getText());
 
-
-
-        System.out.println(allStatementsList.get(lastStatementId).getbranchName());
-
     }
 
-    public int getLastStatementId(){
-        return lastStatementId;
-    }
-
-    public void clearFormData(CciisDataEntryPane dataEntryPane){
+    public void clearFormData(GUI_Pane_DataEntry dataEntryPane){
 
         dataEntryPane.ccBranchDataEntryPane.tfRoutingNum.clear();
         dataEntryPane.ccBranchDataEntryPane.tfBranchName.clear();
@@ -130,18 +104,14 @@ public class GuiLogic{
         dataEntryPane.ccCustAcctInfoDataEntryPane.rbAccountType.rbLabel01.setSelected(true);
         dataEntryPane.ccCustAcctInfoDataEntryPane.tfCreditLimit.clear();
         dataEntryPane.ccCustAcctInfoDataEntryPane.tfPrevBalance.clear();
-
-
-
     }
 
-    public void viewStatement(CciisViewStatementPane cciisViewStatementPane,
+    public void viewStatement(GUI_Pane_Statement cciisViewStatementPane,
                               Main.TabMainPane tabMainPane){
 
 
-        CcCustCcFinCalcs dataAndFees = allStatementsList.get(getLastStatementId());
-        dataAndFees.runCalcs();
-        // changes tab to View Statement
+        CcStatement dataAndFees = allStatementsList.get(allStatementsList.size() - 1);
+        // changes tab to View CcStatement
         tabMainPane.getSelectionModel().select(tabMainPane.tab2);
 
         cciisViewStatementPane.ccBranchDataEntryPane.tfRoutingNum.setText(dataAndFees.getRoutingNum());
@@ -163,7 +133,7 @@ public class GuiLogic{
         cciisViewStatementPane.ccCustomerDataEntryPane.tfCustomerEmail.setText(dataAndFees.getCustomerEmail());
         cciisViewStatementPane.ccCustomerDataEntryPane.tfCustomerPhone.setText(dataAndFees.getCustomerPhone());
         cciisViewStatementPane.ccCustAcctInfoDataEntryPane.tfAccountNum.setText(dataAndFees.getAccountNum());
-        cciisViewStatementPane.ccCustAcctInfoDataEntryPane.tfAccountType.setText(dataAndFees.getAccountType());
+        cciisViewStatementPane.ccCustAcctInfoDataEntryPane.tfAccountType.setText(dataAndFees.getAccountType().toString());
         cciisViewStatementPane.ccCustAcctInfoDataEntryPane.tfCreditLimit.setText(dataAndFees.getCreditLimit());
         cciisViewStatementPane.ccCustAcctInfoDataEntryPane.tfPrevBalance.setText(dataAndFees.getPrevBalance());
         cciisViewStatementPane.ccCustAcctInfoDataEntryPane.tfInterestCharge.setText(dataAndFees.getInterestCharge().toString());
@@ -173,7 +143,7 @@ public class GuiLogic{
         cciisViewStatementPane.ccCustAcctInfoDataEntryPane.tfRemainingCredit.setText(dataAndFees.getRemainingCreditAmt().toString());
 
 //        if (dataAndFees.isOverCreditLimit()) {
-//            cciisViewStatementPane.ccCustAcctInfoDataEntryPane.tfOverLimitFee.setText((CcCustBusinessRatesFees) dataAndFees);
+//            cciisViewStatementPane.ccCustAcctInfoDataEntryPane.tfOverLimitFee.setText((CustBusinessRatesFees) dataAndFees);
 //        }
 
     }

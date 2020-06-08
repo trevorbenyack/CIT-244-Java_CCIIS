@@ -11,8 +11,8 @@ import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 
-public class GuiComponents extends BorderPane {
-    
+public class GUI_Components extends BorderPane {
+
     public boolean isEditable() {
         return true;
     }
@@ -92,19 +92,19 @@ public class GuiComponents extends BorderPane {
             this.setHgap(5);
             this.setVgap(5);
 
-            this.add(new Label("Customer Name:"), 0, 0);
+            this.add(new Label("CcCustomer Name:"), 0, 0);
             this.add(tfCustomerName, 1, 0);
-            this.add(new Label("Customer Address:"), 0, 1);
+            this.add(new Label("CcCustomer Address:"), 0, 1);
             this.add(tfCustomerAddress, 1, 1);
-            this.add(new Label("Customer City:"), 0, 2);
+            this.add(new Label("CcCustomer City:"), 0, 2);
             this.add(tfCustomerCity, 1, 2);
-            this.add(new Label("Customer State:"), 0, 3);
+            this.add(new Label("CcCustomer State:"), 0, 3);
             this.add(tfCustomerState, 1, 3);
-            this.add(new Label("Customer Zip"), 0, 4);
+            this.add(new Label("CcCustomer Zip"), 0, 4);
             this.add(tfCustomerZip, 1, 4);
-            this.add(new Label("Customer Email:"), 0, 5);
+            this.add(new Label("CcCustomer Email:"), 0, 5);
             this.add(tfCustomerEmail, 1, 5);
-            this.add(new Label("Customer Phone:"), 0, 6);
+            this.add(new Label("CcCustomer Phone:"), 0, 6);
             this.add(tfCustomerPhone, 1, 6);
 
             this.setStyle("-fx-background-color: lightpink;");
@@ -133,7 +133,7 @@ public class GuiComponents extends BorderPane {
 
     public class CcCustAcctInfoDataEntryPane extends GridPane {
         TextField tfAccountNum = new TextField();
-        GuiComponents.TwoRadioButtons rbAccountType = new GuiComponents.TwoRadioButtons("Business", "Personal");
+        GUI_Components.TwoRadioButtons rbAccountType = new GUI_Components.TwoRadioButtons("Business", "Personal");
         HBox businessPersonalRbPane = rbAccountType.getTwoRadioButtonsPane();
         TextField tfAccountType = new TextField();
         TextField tfCreditLimit = new TextField();
@@ -151,24 +151,24 @@ public class GuiComponents extends BorderPane {
             this.setHgap(5);
             this.setVgap(5);
 
-            this.add(new Label("Account Number:"), 0, 0);
+            this.add(new Label("CcAccount Number:"), 0, 0);
             this.add(tfAccountNum, 1, 0);
-            this.add(new Label("Account Type:"), 0, 1);
+            this.add(new Label("CcAccount Type:"), 0, 1);
             if (isEditable()) {
                 this.add(businessPersonalRbPane, 1, 1);
-            } else if (!isEditable()){
+            } else if (!isEditable()) {
                 this.add(tfAccountType, 1, 1);
                 tfAccountType.setEditable(isEditable());
             }
-            this.add(new Label("Account Credit Limit:"), 0, 2);
+            this.add(new Label("CcAccount Credit Limit:"), 0, 2);
             this.add(tfCreditLimit, 1, 2);
-            this.add(new Label("Account Prev Balance:"), 0, 3);
+            this.add(new Label("CcAccount Prev Balance:"), 0, 3);
             this.add(tfPrevBalance, 1, 3);
-            if(!isEditable()){
+            if (!isEditable()) {
                 // adds calculation output fields to view
                 this.add(new Label("Interest Charge:"), 0, 4);
                 this.add(tfInterestCharge, 1, 4);
-                this.add(new Label("Statement Balance:"), 0, 5);
+                this.add(new Label("CcStatement Balance:"), 0, 5);
                 this.add(tfFinalStatementBalance, 1, 5);
                 this.add(new Label("Minimum Payment Due:"), 0, 6);
                 this.add(tfNewMinPaymentAmt, 1, 6);
@@ -199,12 +199,11 @@ public class GuiComponents extends BorderPane {
 
             System.out.println(isEditable());
 
-
         } // end CcCustAcctInfoDataEntryPane constructor
     }  // end CcCustAcctInfoDataEntryPane class
 
     public class RecentLedgerItems extends VBox {
-        public RecentLedgerItems(){
+        public RecentLedgerItems() {
         }
 
         GridPane ledgerGrid = new GridPane();
@@ -213,7 +212,7 @@ public class GuiComponents extends BorderPane {
             int i = 1;
 
             for (String[] lineItem : ledgerList) {
-                for (String element :lineItem) {
+                for (String element : lineItem) {
                     this.getChildren().remove(ledgerGrid);
                     ledgerGrid.add(new Text("Line Item Description: "), 0, 0);
                     ledgerGrid.add(new Text("Amount: "), 1, 0);
@@ -221,11 +220,10 @@ public class GuiComponents extends BorderPane {
                     ledgerGrid.add(new Text(lineItem[1]), 1, i);
                     this.getChildren().add(ledgerGrid);
                 }
+
                 i++;
             }
-
         }
-
     } // end RecentLedgerItems
 
     public class TwoRadioButtons extends ToggleGroup {
@@ -235,7 +233,7 @@ public class GuiComponents extends BorderPane {
         RadioButton rbLabel01;
         RadioButton rbLabel02;
 
-        public TwoRadioButtons(String label01, String label02){
+        public TwoRadioButtons(String label01, String label02) {
             this.rbLabel01 = new RadioButton(label01);
             this.rbLabel02 = new RadioButton(label02);
 
@@ -253,6 +251,4 @@ public class GuiComponents extends BorderPane {
             return twoRadioButtonsPane;
         }
     }
-
-
 }
