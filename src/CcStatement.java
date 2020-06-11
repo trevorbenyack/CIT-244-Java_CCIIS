@@ -12,22 +12,53 @@ public class CcStatement extends CcAccount{
     // Each line item is stored in a one dimensional array with the first element as the line item description and
     // the second element as the amount (debit (-) or credit (+)). Each line item array is then added to the
     // ledgerList list
-    ArrayList<String[]> ledgerList = new ArrayList<>();
+    private ArrayList<String[]> ledgerList = new ArrayList<>();
 
     public CcStatement() {
     }
 
-    public CcStatement(RatesFees ratesFees, ArrayList<String[]> ledgerList) {
+    public CcStatement(RatesFees ratesFees) {
         annualInterestRate = ratesFees.getAnnualInterestRate();
         paymentRate = ratesFees.getPaymentRate();
         overLimitFee = ratesFees.getOverLimitFee();
+    }
+
+    public String getAnnualInterestRate() {
+        return annualInterestRate;
+    }
+
+    public void setAnnualInterestRate(String annualInterestRate) {
+        this.annualInterestRate = annualInterestRate;
+    }
+
+    public String getPaymentRate() {
+        return paymentRate;
+    }
+
+    public void setPaymentRate(String paymentRate) {
+        this.paymentRate = paymentRate;
+    }
+
+    public String getOverLimitFee() {
+        return overLimitFee;
+    }
+
+    public void setOverLimitFee(String overLimitFee) {
+        this.overLimitFee = overLimitFee;
+    }
+
+    public ArrayList<String[]> getLedgerList() {
+        return ledgerList;
+    }
+
+    public void setLedgerList(ArrayList<String[]> ledgerList) {
         this.ledgerList = ledgerList;
     }
 
-    // adds all Credits or Debits made to the account
+    // Totals all Credits and Debits made to the account
     public BigDecimal getLedgerListTotal() {
 
-        BigDecimal ledgerListTotalBD = null;
+        BigDecimal ledgerListTotalBD = ZERO_BD;
 
         for (String[] lineItem : ledgerList) {
             BigDecimal tempTotal = ledgerListTotalBD;
@@ -56,15 +87,19 @@ public class CcStatement extends CcAccount{
         }
     }
 
+    public Boolean isOverCreditLimit () {
+        BigDecimal initStmntBalBD = getInitialStatementBalance();
+        BigDecimal semiFinBalBD = initStmntBalBD.add(getInterestCharge());
+        return semiFinBalBD.compareTo(new BigDecimal(getCreditLimit())) > 0;
+    }
+
     // returns the ending statement balance of the account for the month
     // includes interest charges and fees
     public BigDecimal getFinalStatementBalance() {
         BigDecimal initStmntBalBD = getInitialStatementBalance();
         BigDecimal semiFinBalBD = initStmntBalBD.add(getInterestCharge());
 
-        Boolean isOverCreditLimit = semiFinBalBD.compareTo(new BigDecimal(getCreditLimit())) > 0;
-
-        if (isOverCreditLimit) {
+        if (isOverCreditLimit()) {
             return semiFinBalBD.add(new BigDecimal(overLimitFee));
         } else {
             return semiFinBalBD;

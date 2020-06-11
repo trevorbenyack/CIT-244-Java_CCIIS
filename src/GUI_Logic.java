@@ -1,20 +1,16 @@
 import java.util.ArrayList;
 
-
+// This holds all logic for how the GUI behaves. There should be nothing here that holds any class data.
 public class GUI_Logic {
 
-    GUI_Pane_DataEntry dataEntryPane;
-    ArrayList<CcStatement> allStatementsList;
-    ArrayList<String[]> ledgerList = new ArrayList<>();
-
-    public GUI_Logic(ArrayList<CcStatement> allStatementsList, ArrayList<String[]> ledgerList){
-        this.allStatementsList = allStatementsList;
-        this.ledgerList = ledgerList;
+    public GUI_Logic(){
     }
 
-    // adds a line item to ledgerList
-    public void addToLedgerList(
-            ArrayList<String[]> ledgerList,
+    // adds a line item to tempLedgerList
+    // This is invoked when the user presses the "+" in the interface. It takes the line-entry data they've entered
+    // and adds it to the end of the running tempLedgerList that is passed to it.
+    public static void addToLedgerList(
+            ArrayList<String[]> tempLedgerList,
             GUI_Pane_DataEntry dataEntryPane) {
 
         String description = dataEntryPane.lineItemEntryPane.tfDescription.getText();
@@ -34,52 +30,67 @@ public class GUI_Logic {
 
         }
 
-        ledgerList.add(lineItem);
-        System.out.println(ledgerList.get(0)[0] + " " + ledgerList.get(0)[0]);
+        tempLedgerList.add(lineItem);
 
-        dataEntryPane.recentLedgerItems.printLedgerList(ledgerList);
+        // REMOVE THIS LINE
+        System.out.println(tempLedgerList.get(0)[0] + " " + tempLedgerList.get(0)[0]);
 
-    } //end addToLedgerList method
+        // clears data fields
+        dataEntryPane.lineItemEntryPane.tfDescription.clear();
+        dataEntryPane.lineItemEntryPane.tfAmount.clear();
 
-    public void saveFormData(GUI_Pane_DataEntry dataEntryPane){
+        dataEntryPane.recentLedgerItems.printLedgerList(tempLedgerList);
 
+    } // end addToLedgerList method
+
+    public static void saveFormData(GUI_Pane_DataEntry dataEntryPane,
+                                    ArrayList<CcStatement> allStatementsList,
+                                    ArrayList<String[]> tempLedgerList
+                                    ){
+
+        // sends an enum AccountType when creating new CcStatement instance to determine rates and fees for statement.
         if (dataEntryPane.ccCustAcctInfoDataEntryPane.rbAccountType.rbLabel01.isSelected()) {
-            allStatementsList.add(new CcStatement(new RatesFees(AccountType.BUSINESS), ledgerList));
+            allStatementsList.add(new CcStatement(new RatesFees(AccountType.BUSINESS)));
         } else if (dataEntryPane.ccCustAcctInfoDataEntryPane.rbAccountType.rbLabel02.isSelected()) {
-            allStatementsList.add(new CcStatement(new RatesFees(AccountType.PERSONAL), ledgerList));
+            allStatementsList.add(new CcStatement(new RatesFees(AccountType.PERSONAL)));
         }
 
-        CcAccount statementFormData = allStatementsList.get(allStatementsList.size() - 1);
+        // retrieves the current statement being added for easier reference throughout the method
+        CcStatement ccStatement = allStatementsList.get(allStatementsList.size() - 1);
 
-        statementFormData.setRoutingNum(dataEntryPane.ccBranchDataEntryPane.tfRoutingNum.getText());
-        statementFormData.setBranchNum(dataEntryPane.ccBranchDataEntryPane.tfBranchNum.getText());
-        statementFormData.setCompanyName(dataEntryPane.ccBranchDataEntryPane.tfBranchName.getText());
-        statementFormData.setbranchAddress(dataEntryPane.ccBranchDataEntryPane.tfBranchAddress.getText());
-        statementFormData.setbranchCity(dataEntryPane.ccBranchDataEntryPane.tfBranchCity.getText());
-        statementFormData.setbranchState(dataEntryPane.ccBranchDataEntryPane.tfBranchState.getText());
-        statementFormData.setbranchZip(dataEntryPane.ccBranchDataEntryPane.tfBranchZip.getText());
-        statementFormData.setbranchEmail(dataEntryPane.ccBranchDataEntryPane.tfBranchEmail.getText());
-        statementFormData.setbranchPhone(dataEntryPane.ccBranchDataEntryPane.tfBranchPhone.getText());
+        // adds the current tempLedgerList to the CcStatement instance.
+        ccStatement.setLedgerList(tempLedgerList);
 
-        statementFormData.setCustomerName(dataEntryPane.ccCustomerDataEntryPane.tfCustomerName.getText());
-        statementFormData.setCustomerAddress(dataEntryPane.ccCustomerDataEntryPane.tfCustomerAddress.getText());
-        statementFormData.setCustomerCity(dataEntryPane.ccCustomerDataEntryPane.tfCustomerCity.getText());
-        statementFormData.setCustomerState(dataEntryPane.ccCustomerDataEntryPane.tfCustomerState.getText());
-        statementFormData.setCustomerZip(dataEntryPane.ccCustomerDataEntryPane.tfCustomerZip.getText());
-        statementFormData.setCustomerEmail(dataEntryPane.ccCustomerDataEntryPane.tfCustomerEmail.getText());
-        statementFormData.setCustomerPhone(dataEntryPane.ccCustomerDataEntryPane.tfCustomerPhone.getText());
-        statementFormData.setAccountNum(dataEntryPane.ccCustAcctInfoDataEntryPane.tfAccountNum.getText());
+
+        // retrieves the data from the form and saves it the current CcStatement instance.
+        ccStatement.setRoutingNum(dataEntryPane.ccBranchDataEntryPane.tfRoutingNum.getText());
+        ccStatement.setBranchNum(dataEntryPane.ccBranchDataEntryPane.tfBranchNum.getText());
+        ccStatement.setCompanyName(dataEntryPane.ccBranchDataEntryPane.tfBranchName.getText());
+        ccStatement.setbranchAddress(dataEntryPane.ccBranchDataEntryPane.tfBranchAddress.getText());
+        ccStatement.setbranchCity(dataEntryPane.ccBranchDataEntryPane.tfBranchCity.getText());
+        ccStatement.setbranchState(dataEntryPane.ccBranchDataEntryPane.tfBranchState.getText());
+        ccStatement.setbranchZip(dataEntryPane.ccBranchDataEntryPane.tfBranchZip.getText());
+        ccStatement.setbranchEmail(dataEntryPane.ccBranchDataEntryPane.tfBranchEmail.getText());
+        ccStatement.setbranchPhone(dataEntryPane.ccBranchDataEntryPane.tfBranchPhone.getText());
+        ccStatement.setCustomerName(dataEntryPane.ccCustomerDataEntryPane.tfCustomerName.getText());
+        ccStatement.setCustomerAddress(dataEntryPane.ccCustomerDataEntryPane.tfCustomerAddress.getText());
+        ccStatement.setCustomerCity(dataEntryPane.ccCustomerDataEntryPane.tfCustomerCity.getText());
+        ccStatement.setCustomerState(dataEntryPane.ccCustomerDataEntryPane.tfCustomerState.getText());
+        ccStatement.setCustomerZip(dataEntryPane.ccCustomerDataEntryPane.tfCustomerZip.getText());
+        ccStatement.setCustomerEmail(dataEntryPane.ccCustomerDataEntryPane.tfCustomerEmail.getText());
+        ccStatement.setCustomerPhone(dataEntryPane.ccCustomerDataEntryPane.tfCustomerPhone.getText());
+        ccStatement.setAccountNum(dataEntryPane.ccCustAcctInfoDataEntryPane.tfAccountNum.getText());
         if (dataEntryPane.ccCustAcctInfoDataEntryPane.rbAccountType.rbLabel01.isSelected()) {
-            statementFormData.setAccountType(AccountType.BUSINESS);
+            ccStatement.setAccountType(AccountType.BUSINESS);
         } else if (dataEntryPane.ccCustAcctInfoDataEntryPane.rbAccountType.rbLabel02.isSelected()) {
-            statementFormData.setAccountType(AccountType.PERSONAL);
+            ccStatement.setAccountType(AccountType.PERSONAL);
         }
-        statementFormData.setCreditLimit(dataEntryPane.ccCustAcctInfoDataEntryPane.tfCreditLimit.getText());
-        statementFormData.setPrevBalance(dataEntryPane.ccCustAcctInfoDataEntryPane.tfPrevBalance.getText());
+        ccStatement.setCreditLimit(dataEntryPane.ccCustAcctInfoDataEntryPane.tfCreditLimit.getText());
+        ccStatement.setPrevBalance(dataEntryPane.ccCustAcctInfoDataEntryPane.tfPrevBalance.getText());
 
     }
 
-    public void clearFormData(GUI_Pane_DataEntry dataEntryPane){
+    public static void clearFormData(GUI_Pane_DataEntry dataEntryPane){
 
         dataEntryPane.ccBranchDataEntryPane.tfRoutingNum.clear();
         dataEntryPane.ccBranchDataEntryPane.tfBranchName.clear();
@@ -106,47 +117,61 @@ public class GUI_Logic {
         dataEntryPane.ccCustAcctInfoDataEntryPane.tfPrevBalance.clear();
     }
 
-    public void viewStatement(GUI_Pane_Statement cciisViewStatementPane,
-                              Main.TabMainPane tabMainPane){
+    public static void viewStatement(GUI_Pane_Statement guiPaneStatement,
+                                     Main.TabMainPane tabMainPane,
+                                     ArrayList<CcStatement> allStatementsList){
 
-
-        CcStatement dataAndFees = allStatementsList.get(allStatementsList.size() - 1);
         // changes tab to View CcStatement
         tabMainPane.getSelectionModel().select(tabMainPane.tab2);
 
-        cciisViewStatementPane.ccBranchDataEntryPane.tfRoutingNum.setText(dataAndFees.getRoutingNum());
-        cciisViewStatementPane.ccBranchDataEntryPane.tfBranchName.setText(dataAndFees.getbranchName());
-        cciisViewStatementPane.ccBranchDataEntryPane.tfBranchNum.setText(dataAndFees.getAccountNum());
-        cciisViewStatementPane.ccBranchDataEntryPane.tfBranchName.setText(dataAndFees.getbranchName());
-        cciisViewStatementPane.ccBranchDataEntryPane.tfBranchAddress.setText(dataAndFees.getbranchAddress());
-        cciisViewStatementPane.ccBranchDataEntryPane.tfBranchCity.setText(dataAndFees.getbranchCity());
-        cciisViewStatementPane.ccBranchDataEntryPane.tfBranchState.setText(dataAndFees.getbranchState());
-        cciisViewStatementPane.ccBranchDataEntryPane.tfBranchZip.setText(dataAndFees.getbranchZip());
-        cciisViewStatementPane.ccBranchDataEntryPane.tfBranchEmail.setText(dataAndFees.getbranchEmail());
-        cciisViewStatementPane.ccBranchDataEntryPane.tfBranchPhone.setText(dataAndFees.getbranchPhone());
+        // retrieves the current statement being added for easier reference throughout the method
+        CcStatement ccStatement = allStatementsList.get(allStatementsList.size() - 1);
 
-        cciisViewStatementPane.ccCustomerDataEntryPane.tfCustomerName.setText(dataAndFees.getCustomerName());
-        cciisViewStatementPane.ccCustomerDataEntryPane.tfCustomerAddress.setText(dataAndFees.getCustomerAddress());
-        cciisViewStatementPane.ccCustomerDataEntryPane.tfCustomerCity.setText(dataAndFees.getCustomerCity());
-        cciisViewStatementPane.ccCustomerDataEntryPane.tfCustomerState.setText(dataAndFees.getCustomerState());
-        cciisViewStatementPane.ccCustomerDataEntryPane.tfCustomerZip.setText(dataAndFees.getCustomerZip());
-        cciisViewStatementPane.ccCustomerDataEntryPane.tfCustomerEmail.setText(dataAndFees.getCustomerEmail());
-        cciisViewStatementPane.ccCustomerDataEntryPane.tfCustomerPhone.setText(dataAndFees.getCustomerPhone());
-        cciisViewStatementPane.ccCustAcctInfoDataEntryPane.tfAccountNum.setText(dataAndFees.getAccountNum());
-        cciisViewStatementPane.ccCustAcctInfoDataEntryPane.tfAccountType.setText(dataAndFees.getAccountType().toString());
-        cciisViewStatementPane.ccCustAcctInfoDataEntryPane.tfCreditLimit.setText(dataAndFees.getCreditLimit());
-        cciisViewStatementPane.ccCustAcctInfoDataEntryPane.tfPrevBalance.setText(dataAndFees.getPrevBalance());
-        cciisViewStatementPane.ccCustAcctInfoDataEntryPane.tfInterestCharge.setText(dataAndFees.getInterestCharge().toString());
-        cciisViewStatementPane.ccCustAcctInfoDataEntryPane.tfFinalStatementBalance
-                .setText(dataAndFees.getFinalStatementBalance().toString());
-        cciisViewStatementPane.ccCustAcctInfoDataEntryPane.tfNewMinPaymentAmt.setText(dataAndFees.getNewMinPaymentAmt().toString());
-        cciisViewStatementPane.ccCustAcctInfoDataEntryPane.tfRemainingCredit.setText(dataAndFees.getRemainingCreditAmt().toString());
+        // retrieves the data from the CcStatment instance and displays it in the current Statement view pane.
+        guiPaneStatement.ccBranchDataEntryPane.tfRoutingNum.setText(ccStatement.getRoutingNum());
+        guiPaneStatement.ccBranchDataEntryPane.tfBranchName.setText(ccStatement.getbranchName());
+        guiPaneStatement.ccBranchDataEntryPane.tfBranchNum.setText(ccStatement.getAccountNum());
+        guiPaneStatement.ccBranchDataEntryPane.tfBranchName.setText(ccStatement.getbranchName());
+        guiPaneStatement.ccBranchDataEntryPane.tfBranchAddress.setText(ccStatement.getbranchAddress());
+        guiPaneStatement.ccBranchDataEntryPane.tfBranchCity.setText(ccStatement.getbranchCity());
+        guiPaneStatement.ccBranchDataEntryPane.tfBranchState.setText(ccStatement.getbranchState());
+        guiPaneStatement.ccBranchDataEntryPane.tfBranchZip.setText(ccStatement.getbranchZip());
+        guiPaneStatement.ccBranchDataEntryPane.tfBranchEmail.setText(ccStatement.getbranchEmail());
+        guiPaneStatement.ccBranchDataEntryPane.tfBranchPhone.setText(ccStatement.getbranchPhone());
+        guiPaneStatement.ccCustomerDataEntryPane.tfCustomerName.setText(ccStatement.getCustomerName());
+        guiPaneStatement.ccCustomerDataEntryPane.tfCustomerAddress.setText(ccStatement.getCustomerAddress());
+        guiPaneStatement.ccCustomerDataEntryPane.tfCustomerCity.setText(ccStatement.getCustomerCity());
+        guiPaneStatement.ccCustomerDataEntryPane.tfCustomerState.setText(ccStatement.getCustomerState());
+        guiPaneStatement.ccCustomerDataEntryPane.tfCustomerZip.setText(ccStatement.getCustomerZip());
+        guiPaneStatement.ccCustomerDataEntryPane.tfCustomerEmail.setText(ccStatement.getCustomerEmail());
+        guiPaneStatement.ccCustomerDataEntryPane.tfCustomerPhone.setText(ccStatement.getCustomerPhone());
+        guiPaneStatement.ccCustAcctInfoDataEntryPane.tfAccountNum.setText(ccStatement.getAccountNum());
+        guiPaneStatement.ccCustAcctInfoDataEntryPane.tfAccountType.setText(ccStatement.getAccountType().toString());
+        guiPaneStatement.ccCustAcctInfoDataEntryPane.tfCreditLimit.setText(ccStatement.getCreditLimit());
+        guiPaneStatement.ccCustAcctInfoDataEntryPane.tfPrevBalance.setText(ccStatement.getPrevBalance());
+        guiPaneStatement.ccCustAcctInfoDataEntryPane.tfInterestCharge.setText(ccStatement.getInterestCharge().toString());
+        guiPaneStatement.ccCustAcctInfoDataEntryPane.tfFinalStatementBalance
+                .setText(ccStatement.getFinalStatementBalance().toString());
+        guiPaneStatement.ccCustAcctInfoDataEntryPane.tfNewMinPaymentAmt.setText(ccStatement.getNewMinPaymentAmt().toString());
+        guiPaneStatement.ccCustAcctInfoDataEntryPane.tfRemainingCredit.setText(ccStatement.getRemainingCreditAmt().toString());
+        if (ccStatement.isOverCreditLimit()) {
+            guiPaneStatement.ccCustAcctInfoDataEntryPane.lbOverLimitFee.setVisible(true);
+            guiPaneStatement.ccCustAcctInfoDataEntryPane.tfOverLimitFee.setVisible(true);
+            guiPaneStatement.ccCustAcctInfoDataEntryPane.tfOverLimitFee.setText(ccStatement.getOverLimitFee());
+        }
 
-//        if (dataAndFees.isOverCreditLimit()) {
-//            cciisViewStatementPane.ccCustAcctInfoDataEntryPane.tfOverLimitFee.setText((CustBusinessRatesFees) dataAndFees);
+        // NEEDS ADDED:
+        //  Warning for being over limit
+        //  list of line items for the current statement
+
+//        if (ccStatement.isOverCreditLimit()) {
+//            guiPaneStatement.ccCustAcctInfoDataEntryPane.tfOverLimitFee.setText((CustBusinessRatesFees) ccStatement);
 //        }
 
     }
+
+//    This is the code for a window pop-up. Used it for something else that was scrapped, but keeping it for now
+//    in case I decide to use it for something later.
 
 //    public void saveConfirmation() {
 //        Stage stage = new Stage();

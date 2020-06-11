@@ -6,8 +6,6 @@ import javafx.scene.layout.*;
 public class GUI_Pane_DataEntry extends GUI_Components {
 
 
-
-
     @Override
     public boolean isEditable() {
         return true;
@@ -24,7 +22,7 @@ public class GUI_Pane_DataEntry extends GUI_Components {
     LineItemEntryPane lineItemEntryPane = new LineItemEntryPane();
     GUI_Components.RecentLedgerItems recentLedgerItems = new GUI_Components.RecentLedgerItems();
 
-    Button btSave = new Button("Save");
+    Button btSave = new Button("Generate Statement");
 
     // constructor
     public GUI_Pane_DataEntry() {
@@ -75,6 +73,15 @@ public class GUI_Pane_DataEntry extends GUI_Components {
         } // end LineItemEntryPane() constructor
 
     } // end LineItemEntryPane class
+
+    public void setNewLineItemsPane(){
+        recentLedgerItems = new GUI_Components.RecentLedgerItems();
+        // adds the ledger-item-entry pane and the recent-ledgers pane to the bottom half of the window
+        lineItemsPane.setCenter(recentLedgerItems);
+        this.setCenter(lineItemsPane);
+
+
+    }
 
 } // end GUI_Pane_DataEntry class
 

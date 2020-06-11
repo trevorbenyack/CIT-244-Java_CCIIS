@@ -12,28 +12,34 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 
 public class Main extends Application {
-    GUI_Pane_DataEntry dataEntryPane = new GUI_Pane_DataEntry();
-    GUI_Pane_Statement cciisViewStatementPane = new GUI_Pane_Statement();
+    GUI_Pane_DataEntry guiPaneDataEntry = new GUI_Pane_DataEntry();
+    GUI_Pane_Statement guiPaneStatement = new GUI_Pane_Statement();
+
+    // This array holds all of the Statement instances. It's here for future expansion of the program (e.g. retrieving
+    // individual past statements).
     ArrayList<CcStatement> allStatementsList = new ArrayList<>();
-    // holds ledger list until the user saves the entire entry
-    ArrayList<String[]> ledgerList = new ArrayList<>();
-    GUI_Logic guiLogic = new GUI_Logic(allStatementsList, ledgerList);
+
+    // holds the ledger list during data entry. Once the user presses "save", the data is then added to the Statement
+    // instance and tempLedgerList is cleared so it can be used for the next statement entry.
+    ArrayList<String[]> tempLedgerList = new ArrayList<>();
 
     @Override
     public void start(Stage primaryStage) throws Exception{
 
+        // creates tabbed interface for the program
         TabMainPane tabMainPane = new TabMainPane();
 
-        // Process events
-        dataEntryPane.lineItemEntryPane.btAddLineItem
+        // Processes events
+        guiPaneDataEntry.lineItemEntryPane.btAddLineItem
                 .setOnAction(event -> {
-                    guiLogic.addToLedgerList(ledgerList, dataEntryPane);
+                    GUI_Logic.addToLedgerList(tempLedgerList, guiPaneDataEntry);
                 });
-        dataEntryPane.btSave.setOnAction(event -> {
-            guiLogic.saveFormData(dataEntryPane);
-            guiLogic.clearFormData(dataEntryPane);
-            guiLogic.viewStatement(cciisViewStatementPane, tabMainPane);
-            dataEntryPane.setCenter(null);
+        guiPaneDataEntry.btSave.setOnAction(event -> {
+            GUI_Logic.saveFormData(guiPaneDataEntry, allStatementsList, tempLedgerList);
+            GUI_Logic.clearFormData(guiPaneDataEntry);
+            GUI_Logic.viewStatement(guiPaneStatement, tabMainPane, allStatementsList);
+            guiPaneDataEntry.setNewLineItemsPane();
+            tempLedgerList = new ArrayList<>();
         });
 
 
@@ -49,8 +55,8 @@ public class Main extends Application {
     }
 
     public class TabMainPane extends TabPane {
-        Tab tab1 = new Tab("Data Entry", dataEntryPane);
-        Tab tab2 = new Tab("View CcStatement", cciisViewStatementPane);
+        Tab tab1 = new Tab("Data Entry", guiPaneDataEntry);
+        Tab tab2 = new Tab("View CcStatement", guiPaneStatement);
 
         public TabMainPane() {
 

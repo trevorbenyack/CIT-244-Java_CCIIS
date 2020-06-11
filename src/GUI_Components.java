@@ -144,6 +144,10 @@ public class GUI_Components extends BorderPane {
         TextField tfFinalStatementBalance = new TextField();
         TextField tfNewMinPaymentAmt = new TextField();
         TextField tfRemainingCredit = new TextField();
+
+        // this is defined separately so that it can be hidden and unhidden
+        Label lbOverLimitFee = new Label("Over-Limit Fee:");
+
         TextField tfOverLimitFee = new TextField();
 
 
@@ -164,6 +168,9 @@ public class GUI_Components extends BorderPane {
             this.add(tfCreditLimit, 1, 2);
             this.add(new Label("CcAccount Prev Balance:"), 0, 3);
             this.add(tfPrevBalance, 1, 3);
+
+
+
             if (!isEditable()) {
                 // adds calculation output fields to view
                 this.add(new Label("Interest Charge:"), 0, 4);
@@ -174,7 +181,7 @@ public class GUI_Components extends BorderPane {
                 this.add(tfNewMinPaymentAmt, 1, 6);
                 this.add(new Label("Remaining Credit:"), 0, 7);
                 this.add(tfRemainingCredit, 1, 7);
-                this.add(new Label("Over-Limit Fee:"), 0, 8);
+                this.add(lbOverLimitFee, 0, 8);
                 this.add(tfOverLimitFee, 1, 8);
             }
 
@@ -196,6 +203,8 @@ public class GUI_Components extends BorderPane {
             tfNewMinPaymentAmt.setEditable(isEditable());
             tfRemainingCredit.setEditable(isEditable());
             tfOverLimitFee.setEditable(isEditable());
+            lbOverLimitFee.setVisible(false);
+            tfOverLimitFee.setVisible(false);
 
             System.out.println(isEditable());
 
